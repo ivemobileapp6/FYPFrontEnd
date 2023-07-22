@@ -1,5 +1,89 @@
-main {
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+}
+.header-container {
+  background-color: #001529;
+  color: #fff;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 2px 8px #f0f1f2;
+}
+
+.content-container {
+  min-height: calc(100vh - 64px - 70px); /* 64px for the Header, 70px for the Footer */
+}
+
+.desktop-menu {
+  margin-left: auto;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+  
+  .mobile-menu {
+    display: block;
+  }
+}
+.menu-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+.menu-style,
+.menu-style .ant-menu-item,
+.menu-style .ant-menu-submenu-title {
+  color: #fff; 
+}
+
+.menu-style .ant-menu-item-selected,
+.menu-style .ant-menu-submenu-title:hover {
+  color: #1890ff; /* Set the color of selected/hovered items */
+}
+.menu-style {
+  background-color: #001529; /* adjust this to match your header color */
+  border: none; /* remove border */
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+nav a:hover {
+  color: #1890ff;
+}
+
+/* .content-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 20px;
+  box-shadow: 0 2px 8px #f0f1f2;
+} */
+
+.footer-container {
+  background-color: #001529;
+  color: #fff;
   text-align: center;
-  vertical-align: center;
-  line-height: 100vh
+  padding: 10px 0;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+}
+
+.welcome-msg {
+  font-size: 1.2em;
+  color: #1890ff;
 }

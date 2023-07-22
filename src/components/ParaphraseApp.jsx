@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import './ParaphraseApp.css';
 
 const ParaphraseApp = () => {
   const [inputText, setInputText] = useState('');
