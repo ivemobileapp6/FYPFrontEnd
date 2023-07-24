@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { firestore } from '../Firebase'; 
+import { auth } from '../Firebase'; // import your auth object
 
 const WordWritingComponent = () => {
   const [words, setWords] = useState([]);
@@ -25,11 +28,17 @@ const WordWritingComponent = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('https://your-api-endpoint/send-to-tutor', { sentence });
-      alert('Sentence sent to the tutor!');
+      // Save the sentence in Firestore
+      await addDoc(collection(firestore, 'reviews'), {
+        content: sentence,
+        createdAt: serverTimestamp(),
+        userId: auth.currentUser.uid, // get the user ID from the auth object
+        username: auth.currentUser.displayName // get the user's display name from the auth object
+      });
+      alert('Sentence submitted successfully as a review!');
       setSentence('');
     } catch (error) {
-      console.error('Error sending sentence to tutor:', error);
+      console.error('Error saving as a review:', error);
     }
   };
 
@@ -50,7 +59,7 @@ const WordWritingComponent = () => {
           value={sentence}
           onChange={handleChange}
         />
-        <button type="submit">Send to Tutor</button>
+        <button type="submit">Submit as Review</button>
       </form>
     </div>
   );

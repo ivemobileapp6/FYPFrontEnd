@@ -132,6 +132,9 @@ import PresentTenseExercise from './components/Tense'
 import PastTenseExercise from './components/PastTense'
 import FutureTenseExercise from './components/FutureTense'
 import WordBlanker from './components/WorldBlanker'
+import SentenseReorder from './components/SentenseReorder'
+import FileList from './components/FileList'
+import Recorder from './components/Recorder'
 
 import 'regenerator-runtime/runtime';
 import './App.css';
@@ -188,6 +191,9 @@ function App() {
                 <Menu.Item key="ftense"><Link to="/ftense">Future Tense</Link></Menu.Item>  
                 </Menu.SubMenu>
                 <Menu.Item key="wordblanker"><Link to="/wordblanker">WordBlanker</Link></Menu.Item>  
+                <Menu.Item key="sentensereorder"><Link to="/sentensereorder">SentenseReorder</Link></Menu.Item>                 <Menu.Item key="filelist"><Link to="/filelist">Files</Link></Menu.Item>  
+                <Menu.Item key="recorder"><Link to="/recorder">Recorder</Link></Menu.Item>  
+
               </Menu>
             </Col>
             <Col xs={24} sm={24} md={6}>
@@ -225,9 +231,12 @@ function App() {
                   <Route path="/grammar" element={<GrammarlyEditor />} />
                   <Route path="/vision" element={<ImageAnalyzer />} />
                   <Route path="/tense" element={<PresentTenseExercise />} />
-                                    <Route path="/ptense" element={<PastTenseExercise />} />
-                                    <Route path="/ftense" element={<FutureTenseExercise />} />
-                                    <Route path="/wordblanker" element={<WordBlanker />} />
+                  <Route path="/ptense" element={<PastTenseExercise />} />
+                  <Route path="/ftense" element={<FutureTenseExercise />} />
+                  <Route path="/wordblanker" element={<WordBlanker />} />
+                  <Route path="/sentensereorder" element={<SentenseReorder />} />
+                  <Route path="/filelist" element={<FileList />} />
+                  <Route path="/recorder" element={<Recorder />} />
 
                 </>
               ) : null}
