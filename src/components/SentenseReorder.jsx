@@ -156,7 +156,7 @@ import React, { useState, useEffect } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { arrayMoveImmutable } from 'array-move';
 import { collection, getDocs } from 'firebase/firestore';
-import { firestore } from '../Firebase'; // import your Firebase configuration
+import { firestore } from '../Firebase'; 
 
 const SortableItem = SortableElement(({ value }) => <li>{value}</li>);
 
@@ -170,7 +170,7 @@ const SortableList = SortableContainer(({ items }) => {
   );
 });
 
-const SetenceReorder = () => {
+const SentenceReorder = () => {
   const [items, setItems] = useState([]);
   const [originalSentence, setOriginalSentence] = useState('');
 
@@ -180,10 +180,9 @@ const SetenceReorder = () => {
       const reviewDocs = await getDocs(reviewsCollection);
       const reviews = reviewDocs.docs.map(doc => doc.data());
 
-      // Get the first review, strip HTML tags, and split its content into sentences
-      const sentences = reviews[0].content.replace(/(<([^>]+)>)/gi, '').split('.').filter(sentence => sentence.trim() !== '');
-
-      // Choose a random sentence, split it into words, and shuffle the words
+      // Get all sentences from the reviews
+      const sentences = reviews.flatMap(review => review.content.replace(/(<([^>]+)>)/gi, '').split('.').filter(sentence => sentence.trim() !== ''));
+      
       const randomSentence = sentences[Math.floor(Math.random() * sentences.length)];
       const words = randomSentence.split(" ");
       const shuffledWords = words.sort(() => Math.random() - 0.5);
@@ -211,10 +210,10 @@ const SetenceReorder = () => {
 
   return (
     <div>
-      <SortableList items={items} onSortEnd={onSortEnd} />
+      <SortableList items={items} onSortEnd={onSortEnd} pressDelay={200} />
       <button onClick={handleSubmit}>Submit</button>
     </div>
   );
 };
 
-export default SetenceReorder;
+export default SentenceReorder;

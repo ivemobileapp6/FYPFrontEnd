@@ -135,6 +135,11 @@ import WordBlanker from './components/WorldBlanker'
 import SentenseReorder from './components/SentenseReorder'
 import FileList from './components/FileList'
 import Recorder from './components/Recorder'
+import Transcript from './components/Transcript'
+import TextGenerator from './components/TextGenerator'
+import Reading from './components/Reading'
+import FileUploader from './components/FileUploader'
+import FileDisplay from './components/FileDisplay'
 
 import 'regenerator-runtime/runtime';
 import './App.css';
@@ -176,24 +181,34 @@ function App() {
                 <Menu.SubMenu key="exercises" title="Exercises">
                   <Menu.Item key="writing"><Link to="/word-writing">Writing</Link></Menu.Item>
                   <Menu.Item key="speaking"><Link to="/speechtotext">Speaking</Link></Menu.Item>
+                  <Menu.Item key="transcript"><Link to="/transcript">Listening</Link></Menu.Item>  
                   <Menu.Item key="vocab"><Link to="/english">Vocab</Link></Menu.Item>
+                  <Menu.Item key="sentensereorder"><Link to="/sentensereorder">SentenseReorder</Link></Menu.Item>
                 </Menu.SubMenu>
-                <Menu.Item key="paraphrase"><Link to="/paraphase">Paraphrase</Link></Menu.Item>
-                <Menu.Item key="news"><Link to="/news">News</Link></Menu.Item>
+                <Menu.SubMenu key="tools" title="Tools">
+                  <Menu.Item key="paraphrase"><Link to="/paraphase">Paraphrase</Link></Menu.Item>
+                  <Menu.Item key="vision"><Link to="/vision">Vision</Link></Menu.Item>
+                  <Menu.Item key="textgenerator"><Link to="/textgenerator">Text Generator</Link></Menu.Item> 
+                  <Menu.Item key="grammar"><Link to="/grammar">Grammarly Editor</Link></Menu.Item>
+                  <Menu.Item key="reading"><Link to="/reading">Keyword Extraction
+</Link></Menu.Item>  
+                  <Menu.Item key="news"><Link to="/news">News</Link></Menu.Item>
+                </Menu.SubMenu>
                 <Menu.Item key="peerreview"><Link to="/peerreview">Upload Readings</Link></Menu.Item>
                 <Menu.Item key="assignment"><Link to="/assignment">Assignment</Link></Menu.Item>
                 <Menu.Item key="userlist"><Link to="/userlist">UserList</Link></Menu.Item>
                 <Menu.Item key="booking"><Link to="/booking">Booking</Link></Menu.Item>
-                <Menu.Item key="grammar"><Link to="/grammar">GrammarlyEditor</Link></Menu.Item>
-                <Menu.Item key="vision"><Link to="/vision">Vision</Link></Menu.Item>
                 <Menu.SubMenu key="tenses" title="Tenses">
                 <Menu.Item key="tense"><Link to="/tense">Present Tense</Link></Menu.Item>                          <Menu.Item key="ptense"><Link to="/ptense">Past Tense</Link></Menu.Item>
                 <Menu.Item key="ftense"><Link to="/ftense">Future Tense</Link></Menu.Item>  
                 </Menu.SubMenu>
                 <Menu.Item key="wordblanker"><Link to="/wordblanker">WordBlanker</Link></Menu.Item>  
-                <Menu.Item key="sentensereorder"><Link to="/sentensereorder">SentenseReorder</Link></Menu.Item>                 <Menu.Item key="filelist"><Link to="/filelist">Files</Link></Menu.Item>  
+                <Menu.Item key="filelist"><Link to="/filelist">Files</Link></Menu.Item>  
                 <Menu.Item key="recorder"><Link to="/recorder">Recorder</Link></Menu.Item>  
+                <Menu.Item key="fileuploader"><Link to="/fileuploader">Fileuploader</Link></Menu.Item>  
+                <Menu.Item key="filedisplay"><Link to="/filedisplay">Reading</Link></Menu.Item>  
 
+                  
               </Menu>
             </Col>
             <Col xs={24} sm={24} md={6}>
@@ -237,6 +252,12 @@ function App() {
                   <Route path="/sentensereorder" element={<SentenseReorder />} />
                   <Route path="/filelist" element={<FileList />} />
                   <Route path="/recorder" element={<Recorder />} />
+                  <Route path="/transcript" element={<Transcript />} />
+                  <Route path="/textgenerator" element={<TextGenerator />} />
+                  <Route path="/reading" element={<Reading />} />
+                  <Route path="/fileuploader" element={<FileUploader />} />
+                  <Route path="/filedisplay" element={<FileDisplay />} />
+
 
                 </>
               ) : null}

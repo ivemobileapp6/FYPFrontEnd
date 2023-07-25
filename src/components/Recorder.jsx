@@ -126,6 +126,90 @@
 
 // export default Recorder;
 
+// import React, { useState } from 'react';
+// import { ReactMic } from 'react-mic';
+// import { storage } from '../Firebase';
+// import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+// import { getFirestore, collection, addDoc } from 'firebase/firestore';
+// import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
+// const db = getFirestore();
+
+// function Recorder() {
+//   const [isRecording, setIsRecording] = useState(false);
+//   const [blobURL, setBlobURL] = useState('');
+//   const { transcript, resetTranscript } = useSpeechRecognition();
+
+//   const startRecording = () => {
+//     setIsRecording(true);
+//     SpeechRecognition.startListening();
+//   };
+
+//   const stopRecording = () => {
+//     setIsRecording(false);
+//     SpeechRecognition.stopListening();
+//   };
+
+//   const onData = (recordedBlob) => {
+//     // console.log('chunk of real-time data is: ', recordedBlob);
+//   };
+
+//   const onStop = (recordedBlob) => {
+//     setBlobURL(recordedBlob.blobURL);
+
+//     // Upload blob to Firebase
+//     let blob = recordedBlob.blob;
+//     var storageRef = ref(storage, 'audio/' + recordedBlob.blobURL);
+//     var uploadTask = uploadBytesResumable(storageRef, blob);
+
+//     uploadTask.on('state_changed', 
+//       (snapshot) => {
+//         // progress function...
+//       }, 
+//       (error) => {
+//         // error function...
+//         console.log('Upload error: ', error);
+//       }, 
+//       () => {
+//         // complete function...
+//         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+//           console.log('Uploaded audio available at', downloadURL);
+//           try {
+//             const docRef = await addDoc(collection(db, "transcripts"), {
+//               transcript: transcript,
+//               audioURL: downloadURL
+//             });
+//             console.log("Document written with ID: ", docRef.id);
+//           } catch (e) {
+//             console.error("Error adding document: ", e);
+//           }
+//           resetTranscript();
+//         });
+//       }
+//     );
+//   };
+
+//   return (
+//     <div>
+//       <ReactMic
+//         record={isRecording}
+//         className="sound-wave"
+//         onStop={onStop}
+//         onData={onData}
+//         strokeColor="#000000"
+//         backgroundColor="#FF4081" 
+//       />
+//       <button onClick={startRecording} type="button">Start</button>
+//       <button onClick={stopRecording} type="button">Stop</button>
+//       <br/>
+//       <audio src={blobURL} controls="controls" />
+//       <p>Transcript: {transcript}</p>
+//     </div>
+//   );
+// }
+
+// export default Recorder;
+
 import React, { useState } from 'react';
 import { ReactMic } from 'react-mic';
 import { storage } from '../Firebase';
@@ -138,16 +222,19 @@ const db = getFirestore();
 function Recorder() {
   const [isRecording, setIsRecording] = useState(false);
   const [blobURL, setBlobURL] = useState('');
+  const [recordedBlob, setRecordedBlob] = useState(null);
   const { transcript, resetTranscript } = useSpeechRecognition();
 
   const startRecording = () => {
     setIsRecording(true);
     SpeechRecognition.startListening();
+    console.log('Started recording and speech recognition');
   };
 
   const stopRecording = () => {
     setIsRecording(false);
     SpeechRecognition.stopListening();
+    console.log('Stopped recording and speech recognition, transcript: ', transcript);
   };
 
   const onData = (recordedBlob) => {
@@ -156,6 +243,14 @@ function Recorder() {
 
   const onStop = (recordedBlob) => {
     setBlobURL(recordedBlob.blobURL);
+    setRecordedBlob(recordedBlob);
+  };
+
+  const onUpload = () => {
+    if (!recordedBlob) {
+      console.error('No recorded blob to upload');
+      return;
+    }
 
     // Upload blob to Firebase
     let blob = recordedBlob.blob;
@@ -170,21 +265,23 @@ function Recorder() {
         // error function...
         console.log('Upload error: ', error);
       }, 
-      () => {
+      async () => {
         // complete function...
-        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          console.log('Uploaded audio available at', downloadURL);
-          try {
-            const docRef = await addDoc(collection(db, "transcripts"), {
-              transcript: transcript,
-              audioURL: downloadURL
-            });
-            console.log("Document written with ID: ", docRef.id);
-          } catch (e) {
-            console.error("Error adding document: ", e);
-          }
-          resetTranscript();
-        });
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log('Uploaded audio available at', downloadURL);
+
+        try {
+          const docRef = await addDoc(collection(db, "transcripts"), {
+            transcript: transcript,
+            audioURL: downloadURL
+          });
+          console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+
+        resetTranscript();
+        setRecordedBlob(null);
       }
     );
   };
@@ -201,6 +298,7 @@ function Recorder() {
       />
       <button onClick={startRecording} type="button">Start</button>
       <button onClick={stopRecording} type="button">Stop</button>
+      <button onClick={onUpload} type="button">Upload</button>
       <br/>
       <audio src={blobURL} controls="controls" />
       <p>Transcript: {transcript}</p>
