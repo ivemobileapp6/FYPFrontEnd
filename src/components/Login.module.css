@@ -1,0 +1,35 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-methods {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-button {
+  width: 100%;
+}
+
+.or-text {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.email-form {
+  width: 100%;
+}
+
+.input-field {
+  width: 100%;
+}

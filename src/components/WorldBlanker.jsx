@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Page, Text, View, Document, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
+import { Button } from 'antd';
+
 
 const WordBlanker = () => {
   const [inputText, setInputText] = useState('');
@@ -70,8 +72,7 @@ const WordBlanker = () => {
         onChange={handleInputChange} 
         style={{ width: '100%', boxSizing: 'border-box' }} 
       />
-      <button onClick={handleAddText}>Add Text</button>
-
+      <Button type="primary" onClick={handleAddText} style={{ marginTop: '10px' }}>Add Text</Button>
       {processedTexts.map((text, textIndex) => (
         <div key={textIndex}>
           <p style={{

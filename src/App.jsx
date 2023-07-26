@@ -114,6 +114,7 @@ import { Layout, Menu, Row, Col } from 'antd';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import { getDoc, doc, collection } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+import Register from './components/Register';
 import Login from './components/Login';
 import WordWritingComponent from './components/WordWritingComponent';
 import UserList from './components/UserList';
@@ -203,7 +204,7 @@ function App() {
                 <Menu.Item key="ftense"><Link to="/ftense">Future Tense</Link></Menu.Item>  
                 </Menu.SubMenu>
                 <Menu.Item key="wordblanker"><Link to="/wordblanker">WordBlanker</Link></Menu.Item>  
-                <Menu.Item key="filelist"><Link to="/filelist">Files</Link></Menu.Item>  
+                <Menu.Item key="filelist"><Link to="/filelist">Assignment Handedin</Link></Menu.Item>  
                 <Menu.Item key="recorder"><Link to="/recorder">Recorder</Link></Menu.Item>  
                 <Menu.Item key="fileuploader"><Link to="/fileuploader">Fileuploader</Link></Menu.Item>  
                 <Menu.Item key="filedisplay"><Link to="/filedisplay">Reading</Link></Menu.Item>  
@@ -262,6 +263,8 @@ function App() {
                 </>
               ) : null}
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+
             </Routes>
           </Layout>
         </Content>

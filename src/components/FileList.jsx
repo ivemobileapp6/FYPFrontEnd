@@ -26,7 +26,7 @@ const FileList = () => {
 
   return (
     <div>
-      <h2>Reviews</h2>
+      <h2>Assignment Handed In</h2>
       {reviews.length > 0 ? (
         <ul>
           {reviews.map((review, index) => (
