@@ -107,3 +107,12 @@ td {
 tr:nth-child(even) {
   background-color: #f9f9f9;
 }
+
+/* .menu-style {
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu-right {
+  margin-left: auto;
+} */

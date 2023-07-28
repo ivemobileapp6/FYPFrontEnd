@@ -3,7 +3,7 @@ import { getStorage, ref, uploadBytes } from 'firebase/storage';
 
 const storage = getStorage();
 
-const FileUploader = () => {
+const ReadingExerciseUploader = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadCategory, setUploadCategory] = useState("");
   
@@ -45,4 +45,4 @@ const FileUploader = () => {
   );
 };
 
-export default FileUploader;
+export default ReadingExerciseUploader;

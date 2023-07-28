@@ -44,42 +44,42 @@
 //   return (
 //     <BrowserRouter>
 //       <Layout>
-        // <Header className="header-container">
-        //   <Row>
-        //     <Col xs={24} sm={24} md={18}>
-        //       <Menu mode="horizontal" className="menu-style">
-        //         <Menu.Item key="home"><Link to="/">Home</Link></Menu.Item>
-        //         <Menu.SubMenu key="exercises" title="Exercises">
-        //           <Menu.Item key="writing"><Link to="/word-writing">Writing</Link></Menu.Item>
-        //           <Menu.Item key="speaking"><Link to="/speechtotext">Speaking</Link></Menu.Item>
-        //           <Menu.Item key="vocab"><Link to="/english">Vocab</Link></Menu.Item>
-        //         </Menu.SubMenu>
-        //         <Menu.Item key="paraphrase"><Link to="/paraphase">Paraphrase</Link></Menu.Item>
-        //         <Menu.Item key="news"><Link to="/news">News</Link></Menu.Item>
-        //         <Menu.Item key="peerreview"><Link to="/peerreview">Upload Readings</Link></Menu.Item>
-        //         <Menu.Item key="assignment"><Link to="/assignment">Assignment</Link></Menu.Item>
-        //         <Menu.Item key="userlist"><Link to="/userlist">UserList</Link></Menu.Item>
-        //         <Menu.Item key="booking"><Link to="/booking">Booking</Link></Menu.Item>
-        //         <Menu.Item key="grammar"><Link to="/grammar">GrammarlyEditor</Link></Menu.Item>
-        //       </Menu>
-        //     </Col>
-        //     <Col xs={24} sm={24} md={6}>
-        //       <Menu mode="horizontal" className="menu-style menu-right">
-        //         {isLoggedIn ? (
-        //           <>
-        //             <Menu.Item key="welcome">Welcome, {user.displayName}</Menu.Item>
-        //             <Menu.Item key="logout"><Link to="/logout">Logout</Link></Menu.Item>
-        //           </>
-        //         ) : (
-        //           <>
-        //             <Menu.Item key="login"><Link to="/login">Login</Link></Menu.Item>
-        //             <Menu.Item key="register"><Link to="/register">Register</Link></Menu.Item>
-        //           </>
-        //         )}
-        //       </Menu>
-        //     </Col>
-        //   </Row>
-        // </Header>
+// <Header className="header-container">
+//   <Row>
+//     <Col xs={24} sm={24} md={18}>
+//       <Menu mode="horizontal" className="menu-style">
+//         <Menu.Item key="home"><Link to="/">Home</Link></Menu.Item>
+//         <Menu.SubMenu key="exercises" title="Exercises">
+//           <Menu.Item key="writing"><Link to="/word-writing">Writing</Link></Menu.Item>
+//           <Menu.Item key="speaking"><Link to="/speechtotext">Speaking</Link></Menu.Item>
+//           <Menu.Item key="vocab"><Link to="/english">Vocab</Link></Menu.Item>
+//         </Menu.SubMenu>
+//         <Menu.Item key="paraphrase"><Link to="/paraphase">Paraphrase</Link></Menu.Item>
+//         <Menu.Item key="news"><Link to="/news">News</Link></Menu.Item>
+//         <Menu.Item key="peerreview"><Link to="/peerreview">Upload Readings</Link></Menu.Item>
+//         <Menu.Item key="assignment"><Link to="/assignment">Assignment</Link></Menu.Item>
+//         <Menu.Item key="userlist"><Link to="/userlist">UserList</Link></Menu.Item>
+//         <Menu.Item key="booking"><Link to="/booking">Booking</Link></Menu.Item>
+//         <Menu.Item key="grammar"><Link to="/grammar">GrammarlyEditor</Link></Menu.Item>
+//       </Menu>
+//     </Col>
+//     <Col xs={24} sm={24} md={6}>
+//       <Menu mode="horizontal" className="menu-style menu-right">
+//         {isLoggedIn ? (
+//           <>
+//             <Menu.Item key="welcome">Welcome, {user.displayName}</Menu.Item>
+//             <Menu.Item key="logout"><Link to="/logout">Logout</Link></Menu.Item>
+//           </>
+//         ) : (
+//           <>
+//             <Menu.Item key="login"><Link to="/login">Login</Link></Menu.Item>
+//             <Menu.Item key="register"><Link to="/register">Register</Link></Menu.Item>
+//           </>
+//         )}
+//       </Menu>
+//     </Col>
+//   </Row>
+// </Header>
 //         <Content className="content-container" style={{ padding: '0 50px' }}>
 //           <Layout style={{ padding: '24px 0', minHeight: 600 }}>
 //             <Routes>
@@ -108,7 +108,7 @@
 // }
 
 // export default App
-
+import { EditOutlined } from '@ant-design/icons'
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Row, Col } from 'antd';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
@@ -136,11 +136,13 @@ import WordBlanker from './components/WorldBlanker'
 import SentenseReorder from './components/SentenseReorder'
 import FileList from './components/FileList'
 import Recorder from './components/Recorder'
-import Transcript from './components/Transcript'
+import ListeningExercise from './components/ListeningExercise'
 import TextGenerator from './components/TextGenerator'
-import Reading from './components/Reading'
-import FileUploader from './components/FileUploader'
+import KeyWord from './components/KeyWord'
+import ReadingExerciseUploader from './components/ReadingExerciseUploader'
 import FileDisplay from './components/FileDisplay'
+import GoogleTranslate from './components/GoogleTranslate'
+import Home from './components/Home'
 
 import 'regenerator-runtime/runtime';
 import './App.css';
@@ -158,7 +160,7 @@ function App() {
         const userDocSnap = await getDoc(userRef);
         if (userDocSnap.exists()) {
           const userData = userDocSnap.data();
-          authUser = {...authUser, role: userData.role}; // Add role to user object
+          authUser = { ...authUser, role: userData.role };
           setUserRole(userData.role);
         }
         setIsLoggedIn(true);
@@ -176,44 +178,53 @@ function App() {
       <Layout>
         <Header className="header-container">
           <Row>
-            <Col xs={24} sm={24} md={18}>
+            <Col xs={24} sm={24} md={24}>
               <Menu mode="horizontal" className="menu-style">
                 <Menu.Item key="home"><Link to="/">Home</Link></Menu.Item>
                 <Menu.SubMenu key="exercises" title="Exercises">
+                  <Menu.Item key="filedisplay"><Link to="/filedisplay">Reading
+                  </Link></Menu.Item>
                   <Menu.Item key="writing"><Link to="/word-writing">Writing</Link></Menu.Item>
                   <Menu.Item key="speaking"><Link to="/speechtotext">Speaking</Link></Menu.Item>
-                  <Menu.Item key="transcript"><Link to="/transcript">Listening</Link></Menu.Item>  
+                  <Menu.Item key="listeningexercise"><Link to="/listeningexercise">Listening</Link></Menu.Item>
                   <Menu.Item key="vocab"><Link to="/english">Vocab</Link></Menu.Item>
                   <Menu.Item key="sentensereorder"><Link to="/sentensereorder">SentenseReorder</Link></Menu.Item>
+                  <Menu.SubMenu key="tenses" title="Tenses">
+                    <Menu.Item key="tense"><Link to="/tense">Present Tense</Link></Menu.Item>                   <Menu.Item key="ptense"><Link to="/ptense">Past Tense</Link></Menu.Item>
+                    <Menu.Item key="ftense"><Link to="/ftense">Future Tense</Link></Menu.Item>
+                  </Menu.SubMenu>
                 </Menu.SubMenu>
                 <Menu.SubMenu key="tools" title="Tools">
-                  <Menu.Item key="paraphrase"><Link to="/paraphase">Paraphrase</Link></Menu.Item>
+                  <Menu.Item key="paraphrase"><EditOutlined /> &nbsp; <Link to="/paraphase">Paraphrase</Link></Menu.Item>
+                  <Menu.Item key="translate"><Link to="/translate">Translate</Link></Menu.Item>
+                  <Menu.Item key="keyword"><Link to="/keyword">Keyword Extraction
+                  </Link></Menu.Item>
                   <Menu.Item key="vision"><Link to="/vision">Vision</Link></Menu.Item>
-                  <Menu.Item key="textgenerator"><Link to="/textgenerator">Text Generator</Link></Menu.Item> 
+                  <Menu.Item key="textgenerator"><Link to="/textgenerator">Text Generator</Link></Menu.Item>
                   <Menu.Item key="grammar"><Link to="/grammar">Grammarly Editor</Link></Menu.Item>
-                  <Menu.Item key="reading"><Link to="/reading">Keyword Extraction
-</Link></Menu.Item>  
+
                   <Menu.Item key="news"><Link to="/news">News</Link></Menu.Item>
+                  {userRole === 'admin' && (
+                    <>
+                      <Menu.Item key="recorder"><Link to="/recorder">Recorder</Link></Menu.Item>
+                      <Menu.Item key="wordblanker"><Link to="/wordblanker">Reading Exercise Maker</Link></Menu.Item>
+                      <Menu.Item key="readingexerciseuploader"><Link to="/readingexerciseuploader">Reading Exercise Upload</Link></Menu.Item>
+                    </>
+                  )}
                 </Menu.SubMenu>
                 <Menu.Item key="peerreview"><Link to="/peerreview">Upload Readings</Link></Menu.Item>
                 <Menu.Item key="assignment"><Link to="/assignment">Assignment</Link></Menu.Item>
-                <Menu.Item key="userlist"><Link to="/userlist">UserList</Link></Menu.Item>
+                 {userRole === 'admin' && (
+                    <>
+                <Menu.Item key="userlist"><Link to="/userlist">UserList</Link></Menu.Item> 
+                                          </>
+                  )}
                 <Menu.Item key="booking"><Link to="/booking">Booking</Link></Menu.Item>
-                <Menu.SubMenu key="tenses" title="Tenses">
-                <Menu.Item key="tense"><Link to="/tense">Present Tense</Link></Menu.Item>                          <Menu.Item key="ptense"><Link to="/ptense">Past Tense</Link></Menu.Item>
-                <Menu.Item key="ftense"><Link to="/ftense">Future Tense</Link></Menu.Item>  
-                </Menu.SubMenu>
-                <Menu.Item key="wordblanker"><Link to="/wordblanker">WordBlanker</Link></Menu.Item>  
-                <Menu.Item key="filelist"><Link to="/filelist">Assignment Handedin</Link></Menu.Item>  
-                <Menu.Item key="recorder"><Link to="/recorder">Recorder</Link></Menu.Item>  
-                <Menu.Item key="fileuploader"><Link to="/fileuploader">Fileuploader</Link></Menu.Item>  
-                <Menu.Item key="filedisplay"><Link to="/filedisplay">Reading</Link></Menu.Item>  
-
-                  
-              </Menu>
-            </Col>
-            <Col xs={24} sm={24} md={6}>
-              <Menu mode="horizontal" className="menu-style menu-right">
+ {userRole === 'admin' && (
+                    <>
+                <Menu.Item key="filelist"><Link to="/filelist">Assignment Handedin</Link></Menu.Item>
+ </>
+                  )}
                 {isLoggedIn ? (
                   <>
                     <Menu.Item key="welcome">Welcome, {userRole}</Menu.Item>
@@ -221,8 +232,8 @@ function App() {
                   </>
                 ) : (
                   <>
-                    <Menu.Item key="login"><Link to="/login">Login</Link></Menu.Item>
-                    <Menu.Item key="register"><Link to="/register">Register</Link></Menu.Item>
+                    <Menu.Item key="login" className="menu-right"><Link to="/login">Login</Link></Menu.Item>
+                    <Menu.Item key="register" className="menu-right"><Link to="/register">Register</Link></Menu.Item>
                   </>
                 )}
               </Menu>
@@ -234,6 +245,8 @@ function App() {
             <Routes>
               {userRole === 'admin' || userRole === 'student' ? (
                 <>
+                  <Route path="/" element={<Home />} />
+
                   <Route path="/word-writing" element={<WordWritingComponent />} />
                   <Route path="/userlist" element={<UserList />} />
                   <Route path="/logout" element={<Logout />} />
@@ -253,11 +266,11 @@ function App() {
                   <Route path="/sentensereorder" element={<SentenseReorder />} />
                   <Route path="/filelist" element={<FileList />} />
                   <Route path="/recorder" element={<Recorder />} />
-                  <Route path="/transcript" element={<Transcript />} />
+                  <Route path="/listeningexercise" element={<ListeningExercise />} />
                   <Route path="/textgenerator" element={<TextGenerator />} />
-                  <Route path="/reading" element={<Reading />} />
-                  <Route path="/fileuploader" element={<FileUploader />} />
-                  <Route path="/filedisplay" element={<FileDisplay />} />
+                  <Route path="/keyword" element={<KeyWord />} />
+                  <Route path="/readingexerciseuploader" element={<ReadingExerciseUploader />} />
+                  <Route path="/filedisplay" element={<FileDisplay />} />                  <Route path="/translate" element={<GoogleTranslate />} />
 
 
                 </>
@@ -277,3 +290,4 @@ function App() {
 }
 
 export default App;
+

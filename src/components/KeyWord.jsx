@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Reading = () => {
+const KeyWord = () => {
   const [text, setText] = useState('');
   const [keywords, setKeywords] = useState([]);
   const [definitions, setDefinitions] = useState([]);
@@ -115,4 +115,4 @@ const Reading = () => {
   );
 };
 
-export default Reading;
+export default KeyWord;

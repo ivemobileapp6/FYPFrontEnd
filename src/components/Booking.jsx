@@ -294,14 +294,17 @@
 // export default Booking;
 
 import { useState, useEffect } from 'react';
-import { Container, Form, Button, Table } from 'react-bootstrap';
-import { collection, addDoc, onSnapshot, query, orderBy, where, doc, deleteDoc, updateDoc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { Form, Input, Button, Table, Space, DatePicker, TimePicker, Typography, Card, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import moment from 'moment';
+
+const { Title } = Typography;
+const { confirm } = Modal;
 
 const Booking = () => {
-  console.log('Booking component rendered');
-
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
@@ -314,9 +317,8 @@ const Booking = () => {
   const bookingsRef = collection(firestore, 'bookings');
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(query(bookingsRef), (snapshot) => {
+    const unsubscribe = onSnapshot(bookingsRef, (snapshot) => {
       const updatedBookings = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      console.log('Updated bookings:', updatedBookings);
       setBookings(updatedBookings);
     });
 
@@ -349,8 +351,25 @@ const Booking = () => {
     if (status === 'pending' && userRole === 'admin') {
       await deleteDoc(doc(firestore, 'bookings', id));
     } else {
-      console.log('Cannot delete a booking with status', status);
+      Modal.error({
+        title: 'Cannot delete a booking',
+        content: `Cannot delete a booking with status ${status}`,
+      });
     }
+  };
+
+  const showDeleteConfirm = (id, status) => {
+    confirm({
+      title: 'Are you sure delete this booking?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Once deleted, this booking cannot be retrieved.',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteBooking(id, status);
+      },
+    });
   };
 
   const approveBooking = async (id) => {
@@ -361,90 +380,78 @@ const Booking = () => {
     await updateDoc(doc(firestore, 'bookings', id), { status: 'rejected' });
   };
 
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+    },
+    {
+      title: 'Time',
+      dataIndex: 'time',
+      key: 'time',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: 'Actions',
+      key: 'action',
+      render: (text, record) => (
+        <Space size="middle">
+          <Button type="primary" onClick={() => approveBooking(record.id)}>
+            Approve
+          </Button>
+          <Button onClick={() => rejectBooking(record.id)}>Reject</Button>
+          <Button type="primary" danger onClick={() => showDeleteConfirm(record.id, record.status)}>
+            Delete
+          </Button>
+        </Space>
+      ),
+    },
+  ];
+
   return (
-    <Container>
-      <h2>Book a Lesson</h2>
+    <Card title={<Title level={2}>Book a Lesson</Title>}>
       <Form onSubmit={addBooking}>
-        <Form.Group>
-          <Form.Label>Name</Form.Label>
-          <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Date</Form.Label>
-          <Form.Control type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Time</Form.Label>
-          <Form.Control type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Book Lesson
-        </Button>
+        <Form.Item label="Name">
+          <Input value={name} onChange={(e) => setName(e.target.value)} required />
+        </Form.Item>
+        <Form.Item label="Date">
+          <DatePicker value={date && moment(date)} onChange={(date) => setDate(date?.format('YYYY-MM-DD'))} required />
+        </Form.Item>
+        <Form.Item label="Time">
+          <TimePicker format="HH:mm" value={time && moment(time, 'HH:mm')} onChange={(time) => setTime(time?.format('HH:mm'))} required />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Book Lesson
+          </Button>
+        </Form.Item>
       </Form>
       {userRole === 'admin' ? (
-        <>
-          <h3 className="mt-4">Pending Bookings</h3>
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookings.map((booking) => (
-                <tr key={booking.id}>
-                  <td>{booking.name}</td>
-                  <td>{booking.date}</td>
-                  <td>{booking.time}</td>
-                  <td>{booking.status}</td>
-                  <td>
-                    <Button variant="success" onClick={() => approveBooking(booking.id)} size="sm">
-                      Approve
-                    </Button>{' '}
-                    <Button variant="danger" onClick={() => rejectBooking(booking.id)} size="sm">
-                      Reject
-                    </Button>{' '}
-                    <Button variant="danger" onClick={() => deleteBooking(booking.id, booking.status)} size="sm">
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </>
+        <Table
+          title={() => <Title level={3}>Pending Bookings</Title>}
+          columns={columns}
+          dataSource={bookings}
+          rowKey="id"
+        />
       ) : (
-        <>
-          <h3 className="mt-4">Your Bookings</h3>
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookings
-                .filter((booking) => booking.userId === auth.currentUser.uid)
-                .map((booking) => (
-                  <tr key={booking.id}>
-                    <td>{booking.name}</td>
-                    <td>{booking.date}</td>
-                    <td>{booking.time}</td>
-                    <td>{booking.status}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </Table>
-        </>
+        <Table
+          title={() => <Title level={3}>Your Bookings</Title>}
+          columns={columns.filter((column) => column.key !== 'action')}
+          dataSource={bookings.filter((booking) => booking.userId === auth.currentUser.uid)}
+          rowKey="id"
+        />
       )}
-    </Container>
+    </Card>
   );
 };
 

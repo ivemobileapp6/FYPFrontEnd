@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { firestore } from '../Firebase'; 
-import { auth } from '../Firebase'; // import your auth object
+import { auth } from '../Firebase';
+import { Layout, Input, Button } from 'antd';
+
+const { Header, Content, Footer } = Layout;
 
 const WordWritingComponent = () => {
   const [words, setWords] = useState([]);
@@ -69,12 +72,14 @@ const handleSubmit = async (event) => {
   }
 };
 
-  return (
-    <div>
+return (
+  <Layout>
+  
       <h1>Words from API</h1>
+    <Content>
       <div>
         <label htmlFor="wordCount">Word Count:</label>
-        <input
+        <Input
           type="number"
           id="wordCount"
           name="count"
@@ -82,7 +87,7 @@ const handleSubmit = async (event) => {
           onChange={handleWordSettingsChange}
         />
         <label htmlFor="wordLength">Word Length:</label>
-        <input
+        <Input
           type="number"
           id="wordLength"
           name="length"
@@ -90,14 +95,14 @@ const handleSubmit = async (event) => {
           onChange={handleWordSettingsChange}
         />
         <label htmlFor="wordLetter">Starting Letter:</label>
-        <input
+        <Input
           type="text"
           id="wordLetter"
           name="letter"
           value={wordSettings.letter}
           onChange={handleWordSettingsChange}
         />
-        <button onClick={fetchWords}>Update Words</button>
+        <Button onClick={fetchWords}>Update Words</Button>
       </div>
       <ul>
         {words.map((word, index) => (
@@ -106,17 +111,19 @@ const handleSubmit = async (event) => {
       </ul>
       <form onSubmit={handleSubmit}>
         <label htmlFor="sentence">Write a sentence:</label>
-        <input
+        <Input
           type="text"
           id="sentence"
           name="sentence"
           value={sentence}
           onChange={handleChange}
         />
-        <button type="submit">Submit as Review</button>
+<button type="submit">Submit as Review</button>
       </form>
-    </div>
-  );
+    </Content>
+
+  </Layout>
+);
 };
 
 export default WordWritingComponent;
